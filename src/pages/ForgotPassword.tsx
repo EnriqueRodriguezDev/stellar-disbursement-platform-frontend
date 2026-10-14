@@ -127,7 +127,7 @@ export const ForgotPassword = () => {
             variant="primary"
             size="md"
             type="submit"
-            disabled={!organizationName || !email || captcha.isPending}
+            disabled={(!SINGLE_TENANT_MODE && !organizationName) || !email || captcha.isPending}
             isLoading={isPending}
           >
             Submit

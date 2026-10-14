@@ -216,7 +216,12 @@ export const SignIn = () => {
               variant="primary"
               size="md"
               type="submit"
-              disabled={!organizationName || !email || !password || captcha.isPending}
+              disabled={
+                (!SINGLE_TENANT_MODE && !organizationName) ||
+                !email ||
+                !password ||
+                captcha.isPending
+              }
               isLoading={userAccount.status === "PENDING"}
             >
               Sign in
