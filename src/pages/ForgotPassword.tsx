@@ -33,15 +33,18 @@ export const ForgotPassword = () => {
 
   const [organizationName, setOrganizationName] = useState(getSdpTenantName());
   const [email, setEmail] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
 
   const handleForgotPassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setCaptchaError("");
 
     let recaptchaToken = "";
     try {
       recaptchaToken = await captcha.getToken("forgot_password");
     } catch (err) {
       console.error("reCAPTCHA failed:", err);
+      setCaptchaError(err instanceof Error ? err.message : "Verification failed. Please try again.");
       return;
     }
 
@@ -82,6 +85,11 @@ export const ForgotPassword = () => {
           </Notification>
         ) : null}
 
+        {captchaError && (
+          <Notification variant="error" title="Verification unavailable" isFilled={true}>
+            {captchaError}
+          </Notification>
+        )}
         {error ? (
           <Notification variant="error" title="Forgot password error" isFilled={true}>
             <ErrorWithExtras appError={error} />

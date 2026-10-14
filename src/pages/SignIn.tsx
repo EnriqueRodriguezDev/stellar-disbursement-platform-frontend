@@ -37,6 +37,7 @@ export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [deviceId, setDeviceId] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const [showPasswordResetSuccess, setShowPasswordResetSuccess] = useState(
     Boolean(location.state?.didResetPassword),
   );
@@ -103,6 +104,7 @@ export const SignIn = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setCaptchaError("");
     dispatch(resetStoreAction());
 
     let recaptchaToken = "";
@@ -110,6 +112,7 @@ export const SignIn = () => {
       recaptchaToken = await captcha.getToken("login");
     } catch (err) {
       console.error("reCAPTCHA failed:", err);
+      setCaptchaError(err instanceof Error ? err.message : "Verification failed. Please try again.");
       return;
     }
 
@@ -153,7 +156,12 @@ export const SignIn = () => {
             isFilled={true}
           />
         )}
-        {!isSessionExpired && userAccount.errorString && (
+        {captchaError && (
+          <Notification variant="error" title="Verification unavailable" isFilled={true}>
+            {captchaError}
+          </Notification>
+        )}
+        {userAccount.errorString && (
           <Notification variant="error" title="Sign in error" isFilled={true}>
             <ErrorWithExtras
               appError={{

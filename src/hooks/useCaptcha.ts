@@ -81,6 +81,13 @@ export const useCaptcha = (recaptchaRef: React.RefObject<Recaptcha | null>) => {
       return "";
     }
 
+    if (!captchaConfig) {
+      throw new Error("Verification configuration could not be loaded. Refresh the page and try again.");
+    }
+    if (!siteKey) {
+      throw new Error("reCAPTCHA is enabled but its site key is missing. Contact the administrator.");
+    }
+
     if (isV3) {
       return executeRecaptchaV3(siteKey, action);
     }
