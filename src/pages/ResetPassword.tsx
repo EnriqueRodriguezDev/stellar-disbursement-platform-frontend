@@ -65,7 +65,12 @@ export const ResetPassword = () => {
   const allInputsValid = () => {
     if (errorPassword || errorPasswordMatch) {
       return false;
-    } else if (organizationName && password && confirmPassword && confirmationToken) {
+    } else if (
+      (SINGLE_TENANT_MODE || organizationName) &&
+      password &&
+      confirmPassword &&
+      confirmationToken
+    ) {
       return true;
     }
 
@@ -85,7 +90,7 @@ export const ResetPassword = () => {
         ) : null}
 
         {error ? (
-          <Notification variant="error" title="Reset password error isFilled={true}">
+          <Notification variant="error" title="Reset password error" isFilled={true}>
             <ErrorWithExtras appError={error} />
           </Notification>
         ) : null}

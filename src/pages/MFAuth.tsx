@@ -182,7 +182,7 @@ export const MFAuth = () => {
                 variant="primary"
                 size="md"
                 type="submit"
-                disabled={!organizationName || !mfaCode || captcha.isPending}
+                disabled={(!SINGLE_TENANT_MODE && !organizationName) || !mfaCode || captcha.isPending}
                 isLoading={userAccount.status === "PENDING"}
               >
                 Submit
